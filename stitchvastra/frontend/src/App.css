@@ -1,0 +1,154 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Homepage Layout */
+.homepage {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  background: #f9f9f9;
+}
+
+/* Header Styling */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  background: #2e3a59;
+  color: white;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.navbar {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: #ff7e5f;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  color: white;
+  padding: 50px 30px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.hero-text {
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-bottom: 30px;
+}
+
+/* Call to Action Buttons */
+.cta {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 50px 0;
+}
+
+.cta-button {
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cta-button:hover {
+  transform: scale(1.05);
+}
+
+.pickup-button {
+  background: #2e3a59;
+  color: white;
+}
+
+.customize-button {
+  background: #ff7e5f;
+  color: white;
+}
+
+.cta-button i {
+  font-size: 1.5rem;
+}
+
+/* Features Section */
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  padding: 50px 30px;
+  text-align: center;
+}
+
+.feature-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 300px;
+}
+
+.feature-card h2 {
+  font-size: 1.5rem;
+  color: #2e3a59;
+  margin-bottom: 10px;
+}
+
+.feature-card p {
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Footer Styling */
+.footer {
+  background: #2e3a59;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.footer-link {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.footer-link:hover {
+  color: #ff7e5f;
+}
