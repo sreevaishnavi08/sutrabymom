@@ -14,6 +14,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import SettingsModal from './settings/SettingsModal';
+import MyOrders from "./MyOrders";
 
 interface UserMenuProps {
   isOpen: boolean;
@@ -27,11 +28,12 @@ interface UserMenuProps {
 export default function UserMenu({ isOpen, onClose, user }: UserMenuProps) {
   const [showSettings, setShowSettings] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [showMyOrders, setShowMyOrders] = useState(false);
 
   const menuItems = [
     { icon: User, label: 'Profile', onClick: () => {} },
     { icon: Bell, label: 'Notifications', onClick: () => {} },
-    { icon: Package, label: 'My Orders', onClick: () => {} },
+    { icon: Package, label: 'My Orders', onClick: () => setShowMyOrders(true) },
     { icon: Palette, label: 'Saved Designs', onClick: () => {} },
     { icon: Ruler, label: 'Measurements', onClick: () => {} },
     { icon: Settings, label: 'Settings', onClick: () => setShowSettings(true) },
@@ -94,6 +96,21 @@ export default function UserMenu({ isOpen, onClose, user }: UserMenuProps) {
         isOpen={showSettings} 
         onClose={() => setShowSettings(false)} 
       />
+
+      {/* My Orders */}
+      {showMyOrders && (
+        <div className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 max-w-2xl w-full">
+            <MyOrders />
+            <button
+              onClick={() => setShowMyOrders(false)}
+              className="mt-4 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Logout Confirmation Modal */}
       {showLogoutConfirm && (

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom"; 
+import Cart from "./Cart";
 import { 
   ShoppingCart, 
   Truck, 
@@ -26,6 +28,7 @@ export default function Navbar({
   isSignedIn: initialIsSignedIn = false, 
   user = { name: "User Name", email: "user@example.com" } 
 }: NavbarProps) {
+  const navigate = useNavigate();
   const [isSignedIn, setIsSignedIn] = useState(initialIsSignedIn);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -60,7 +63,7 @@ export default function Navbar({
     if (!isSignedIn) {
       setShowAuthModal(true);
     } else {
-      setShowCartModal(true);
+      navigate("/cart");
     }
   };
 
@@ -72,10 +75,12 @@ export default function Navbar({
     }
   };
 
+  const textColorClass = isScrolled ? 'text-gray-900' : 'text-white'; // Set text color based on scroll
+
   return (
     <>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/80 backdrop-blur-md shadow-md' : 'bg-transparent'
+        isScrolled ? 'bg-white/80 backdrop-blur-md shadow-md text-black' : 'bg-transparent text-black'
       }`}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-20">
@@ -83,33 +88,25 @@ export default function Navbar({
             <div className="flex items-center space-x-4">
               <button 
                 onClick={() => setShowSideMenu(true)}
-                className={`p-2 rounded-full hover:bg-black/10 transition-colors ${
-                  isScrolled ? 'text-gray-600' : 'text-white'
-                }`}
+                className={`p-2 rounded-full hover:bg-black/10 transition-colors ${textColorClass}`}
               >
                 <Menu className="h-6 w-6" />
               </button>
               <button 
                 onClick={() => setShowAIAssistant(true)}
-                className={`p-2 rounded-full hover:bg-black/10 transition-colors ${
-                  isScrolled ? 'text-gray-600' : 'text-white'
-                }`}
+                className={`p-2 rounded-full hover:bg-black/10 transition-colors ${textColorClass}`}
               >
                 <Bot className="h-6 w-6" />
               </button>
               <button 
                 onClick={() => setShowSearch(!showSearch)}
-                className={`p-2 rounded-full hover:bg-black/10 transition-colors ${
-                  isScrolled ? 'text-gray-600' : 'text-white'
-                }`}
+                className={`p-2 rounded-full hover:bg-black/10 transition-colors ${textColorClass}`}
               >
                 <Search className="h-6 w-6" />
               </button>
               <div className="relative">
                 <button 
-                  className={`p-2 rounded-full hover:bg-black/10 transition-colors flex items-center gap-1 ${
-                    isScrolled ? 'text-gray-600' : 'text-white'
-                  }`}
+                  className={`p-2 rounded-full hover:bg-black/10 transition-colors flex items-center gap-1 ${textColorClass}`}
                   onClick={() => setShowExploreMenu(!showExploreMenu)}
                 >
                   <Compass className="h-6 w-6" />
@@ -138,47 +135,37 @@ export default function Navbar({
             </div>
 
             {/* Center Logo */}
-<div className="absolute left-1/2 transform -translate-x-1/2 flex items-center">
-  <a
-    href="/"
-    onClick={(e) => {
-      e.preventDefault();
-      window.location.href = "/";
-    }}
-    className={`h-12 w-48 flex items-center justify-center ${
-      isScrolled ? 'text-gray-900' : 'text-white'
-    }`}
-  >
-    <span className="text-xl font-serif cursor-pointer">StitchVastra</span>
-  </a>
-</div>
-
-
+            <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center">
+              <a
+                href="/"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = "/";
+                }}
+                className={`h-12 w-48 flex items-center justify-center ${textColorClass}`}
+              >
+                <span className="text-xl font-serif cursor-pointer">StitchVastra</span>
+              </a>
+            </div>
 
             {/* Right Section */}
             <div className="flex items-center space-x-4">
               <button 
                 onClick={handleWishlistClick}
-                className={`p-2 rounded-full hover:bg-black/10 transition-colors ${
-                  isScrolled ? 'text-gray-600' : 'text-white'
-                }`}
+                className={`p-2 rounded-full hover:bg-black/10 transition-colors ${textColorClass}`}
               >
                 <Heart className="h-5 w-5" />
               </button>
 
               <button 
-                onClick={handleCartClick}
-                className={`p-2 rounded-full hover:bg-black/10 transition-colors ${
-                  isScrolled ? 'text-gray-600' : 'text-white'
-                }`}
+                onClick={handleCartClick} 
+                className={`p-2 rounded-full hover:bg-black/10 transition-colors ${textColorClass}`}
               >
                 <ShoppingCart className="h-5 w-5" />
               </button>
               
               <button 
-                className={`p-2 rounded-full hover:bg-black/10 transition-colors ${
-                  isScrolled ? 'text-gray-600' : 'text-white'
-                }`}
+                className={`p-2 rounded-full hover:bg-black/10 transition-colors ${textColorClass}`}
               >
                 <Truck className="h-5 w-5" />
               </button>
@@ -192,9 +179,7 @@ export default function Navbar({
                       setShowAccountMenu(!showAccountMenu);
                     }
                   }}
-                  className={`p-2 rounded-full hover:bg-black/10 transition-colors ${
-                    isScrolled ? 'text-gray-600' : 'text-white'
-                  }`}
+                  className={`p-2 rounded-full hover:bg-black/10 transition-colors ${textColorClass}`}
                 >
                   <User className="h-5 w-5" />
                 </button>

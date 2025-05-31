@@ -1,3 +1,4 @@
+import { signInWithGoogle } from '../../firebaseConfig';
 import React, { useState } from 'react';
 import { LogIn, X, User, Mail, Lock, UserCog, CheckCircle2, MessageSquare, Chrome, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -68,6 +69,8 @@ export default function AuthModal({ onClose, onSignIn }: AuthModalProps) {
       setCredentialError('Invalid admin credentials');
     }
   };
+
+
 
   //3
   const handleVastrakarLogin = () => {
@@ -550,13 +553,23 @@ export default function AuthModal({ onClose, onSignIn }: AuthModalProps) {
               </div>
 
               <div className="space-y-3">
-                <button
-                  type="button"
-                  className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <Chrome className="h-5 w-5 text-red-500" />
-                  Continue with Google
-                </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    const user = await signInWithGoogle();
+                    console.log("User signed in:", user);
+                    onSignIn(); // Call the sign-in handler
+                    onClose();  // Close the modal
+                  } catch (error) {
+                    console.error("Google sign-in failed", error);
+                  }
+                }}
+                className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <Chrome className="h-5 w-5 text-red-500" />
+                Continue with Google
+              </button>
 
                 <button
                   type="button"

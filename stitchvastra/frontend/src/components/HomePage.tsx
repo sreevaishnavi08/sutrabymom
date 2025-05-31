@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Star, Scissors, Shirt, ArrowRight, Mail } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, Scissors, Shirt, ArrowRight, Mail, Palette } from 'lucide-react';
 import SchedulePickup from '../components/SchedulePickup';
 import CustomizeClothes from '../components/CustomizeClothes';
+import FindMakeupArtist from '../components/FindMakeupArtist';
 
 const carouselImages = [
   {
@@ -53,6 +54,7 @@ export default function HomePage() {
   const [isSchedulePickupOpen, setIsSchedulePickupOpen] = useState(false);
   const [isSignInOpen, setIsSignInOpen] = useState(false); // Add this line
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
+  const [isFindMakeupArtistOpen, setIsFindMakeupArtistOpen] = useState(false);
 
   // Automatic slide change
   useEffect(() => {
@@ -129,6 +131,12 @@ export default function HomePage() {
               <Shirt className="h-5 w-5" />
               Customize Your Clothes
             </button>
+            <button 
+              onClick={() => setIsFindMakeupArtistOpen(true)}
+              className="px-8 py-4 bg-purple-600 text-white rounded-full hover:bg-purple-700 transform hover:scale-105 transition-all duration-300 font-medium text-lg shadow-lg flex items-center justify-center gap-2">
+              <Palette className="h-5 w-5" />
+              Find a Makeup Artist
+            </button>
           </div>
         </div>
       </div>
@@ -142,6 +150,11 @@ export default function HomePage() {
         isOpen={isCustomizeOpen}
         onClose={() => setIsCustomizeOpen(false)}
       />
+      <FindMakeupArtist
+        isOpen={isFindMakeupArtistOpen}
+        onClose={() => setIsFindMakeupArtistOpen(false)}
+      />
+
       {/* Services Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">

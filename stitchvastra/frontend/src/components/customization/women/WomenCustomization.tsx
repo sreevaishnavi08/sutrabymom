@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Sparkles, Scissors, Shirt, Palette, ArrowLeft, Plus, Check, Diamond, Gem} from 'lucide-react';
+import { useCart } from "../../CartContext";
+import { useNavigate } from 'react-router-dom';
 
 const categories = [
   {
@@ -139,6 +141,8 @@ interface CustomizationState {
   jewellery: string[];
 }
 export default function WomenCustomization() {
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [customizationStep, setCustomizationStep] = useState(0);
   const [customizationState, setCustomizationState] = useState<CustomizationState>({
@@ -153,7 +157,12 @@ export default function WomenCustomization() {
     },
     jewellery: []
   });
+  const [showModal, setShowModal] = useState(false); // Modal visibility state
 
+  const handleCompleteCustomization = () => {
+    // Show the modal when clicked on the last step
+    setShowModal(true);
+  };
   const handleCustomizationChange = (field: string, value: any) => {
     setCustomizationState(prev => {
       if (field.startsWith('blouse.')) {
@@ -425,18 +434,18 @@ export default function WomenCustomization() {
             Previous
           </button>
           <button
-            onClick={() => {
-              if (customizationStep < steps.length - 1) {
-                setCustomizationStep(prev => prev + 1);
-              } else {
-                // Handle final submission
-                console.log('Final customization state:', customizationState);
-              }
-            }}
-            className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-          >
-            {customizationStep === steps.length - 1 ? 'Complete Customization' : 'Next Step'}
-          </button>
+  onClick={() => {
+    if (customizationStep < steps.length - 1) {
+      setCustomizationStep(prev => prev + 1);
+    } else {
+      handleCompleteCustomization(); // Call the function to show modal
+    }
+  }}
+  className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+>
+  {customizationStep === steps.length - 1 ? 'Complete Customization' : 'Next Step'}
+</button>
+
         </div>
       </div>
     );
@@ -521,6 +530,35 @@ export default function WomenCustomization() {
           {renderCustomizationStep()}
         </div>
       </div>
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-semibold mb-4">What would you like to do?</h2>
+            <div className="flex justify-between">
+            <button
+          onClick={() => navigate('/checkout')} // This redirects to the checkout page
+          className="w-full py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+        >
+          Buy Now
+        </button>
+              <button
+  onClick={() => {
+    addToCart({
+      id: selectedItem.id,
+      name: selectedItem.name,
+      price: "₹10,000", // You can calculate the final price
+      image: selectedItem.image,
+    });
+    setShowModal(false); // Close modal
+  }}
+  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+>
+  Add to Cart
+</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
