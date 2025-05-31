@@ -1,57 +1,73 @@
 const cors = require('cors');
 const express = require('express');
-const mongoose = require('mongoose');
-const FormDataModel = require('./models/FormData');
+const { createClient } = require('@supabase/supabase-js');
+require('dotenv').config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/tailor-craft-data', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    console.log("Connected to MongoDB");
-}).catch(err => {
-    console.error("Error connecting to MongoDB:", err);
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
+
+app.post('/register', async (req, res) => {
+  const { email, password, name } = req.body;
+  
+  try {
+    // Check if user exists
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select()
+      .eq('email', email)
+      .single();
+
+    if (existingUser) {
+      return res.json("Already registered");
+    }
+
+    // Create new user
+    const { data, error } = await supabase
+      .from('users')
+      .insert([{ email, password, name }])
+      .select();
+
+    if (error) throw error;
+    res.json(data[0]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-app.post('/register', (req, res) => {
-    // To post / insert data into database
-    const { email, password } = req.body;
-    FormDataModel.findOne({ email: email })
-        .then(user => {
-            if (user) {
-                res.json("Already registered");
-            } else {
-                FormDataModel.create(req.body)
-                    .then(log_reg_form => res.json(log_reg_form))
-                    .catch(err => res.json(err));
-            }
-        });
-});
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  
+  try {
+    const { data: user, error } = await supabase
+      .from('users')
+      .select()
+      .eq('email', email)
+      .eq('password', password)
+      .single();
 
-app.post('/login', (req, res) => {
-    // To find record from the database
-    const { email, password } = req.body;
-    FormDataModel.findOne({ email: email })
-        .then(user => {
-            if (user) {
-                // If user found then these 2 cases
-                if (user.password === password) {
-                    res.json("Success");
-                } else {
-                    res.json("Wrong password");
-                }
-            } else {
-                // If user not found then 
-                res.json("No records found! ");
-            }
-        });
+    if (error) throw error;
+
+    if (user) {
+      if (user.password === password) {
+        res.json("Success");
+      } else {
+        res.json("Wrong password");
+      }
+    } else {
+      res.json("No records found!");
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.listen(3001, () => {
-    console.log("Server Running...");
+  console.log("Server Running...");
 });
-
