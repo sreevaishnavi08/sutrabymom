@@ -144,7 +144,7 @@ export default function Navbar({
                 }}
                 className={`h-12 w-48 flex items-center justify-center ${textColorClass}`}
               >
-                <span className="text-xl font-serif cursor-pointer">StitchVastra</span>
+                <span className="text-xl font-serif cursor-pointer">SutraByMom</span>
               </a>
             </div>
 
