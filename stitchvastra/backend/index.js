@@ -13,6 +13,7 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY
 );
 
+// User Registration
 app.post('/register', async (req, res) => {
   const { email, password, name } = req.body;
   
@@ -41,6 +42,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
+// User Login
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
   
@@ -68,6 +70,39 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.listen(3001, () => {
-  console.log("Server Running...");
+// Get user profile
+app.get('/profile/:userId', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', req.params.userId)
+      .single();
+
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update user profile
+app.put('/profile/:userId', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .update(req.body)
+      .eq('id', req.params.userId)
+      .select();
+
+    if (error) throw error;
+    res.json(data[0]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server Running on port ${PORT}`);
 });
